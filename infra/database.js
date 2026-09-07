@@ -22,7 +22,7 @@ async function getNewCLient() {
     user: process.env.POSTGRES_USER,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
-    ssl: getSllValues(),
+    ssl: getSSLValues(),
   });
 
   await client.connect();
@@ -33,6 +33,12 @@ export default {
   getNewCLient,
 };
 
-function getSllValues() {
+function getSSLValues() {
+  if (process.env.POSTGRES_CA) {
+    return {
+      ca: process.env.POSTGRES_CA,
+    };
+  }
+
   return process.env.NODE_ENV === "production" ? true : false;
 }
